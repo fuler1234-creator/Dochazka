@@ -10,6 +10,7 @@
 <meta name="apple-mobile-web-app-title" content="Docházka">
 <meta name="theme-color" content="#1c1a17">
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Crimson+Pro:ital,wght@0,300;0,400;1,300&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <style>
 :root {
   --bg:#faf8f5;--bg2:#f2efe9;--surface:#fff;
@@ -29,13 +30,16 @@ body{background:var(--bg);color:var(--text);font-family:'Syne',sans-serif;min-he
 .header-sub{font-family:'IBM Plex Mono',monospace;font-size:.65rem;color:#9a9488;letter-spacing:.08em;text-transform:uppercase;margin-top:.25rem;}
 .header-right{display:flex;gap:.4rem;flex-wrap:wrap;}
 .btn{font-family:'Syne',sans-serif;font-size:.72rem;font-weight:600;letter-spacing:.04em;padding:.45rem .9rem;border-radius:5px;cursor:pointer;border:none;transition:all .15s;text-transform:uppercase;}
+.btn:hover{opacity:0.85;transform:translateY(-1px);}
 .btn-ghost{background:rgba(255,255,255,.08);color:#ccc7bc;border:1px solid rgba(255,255,255,.15);}
 .btn-gold{background:#c8a84b;color:#1c1a17;}
 .btn-primary{background:var(--accent);color:#fff;}
 .btn-sm{font-size:.68rem;padding:.28rem .6rem;border-radius:4px;background:var(--bg2);color:var(--muted);border:1px solid var(--border);font-family:'Syne',sans-serif;font-weight:600;cursor:pointer;transition:all .15s;}
+.btn-sm:hover{opacity:0.85;}
 .month-nav{display:flex;align-items:center;gap:.8rem;padding:.8rem 1.2rem;background:var(--surface);border-bottom:1px solid var(--border);flex-wrap:wrap;}
 .month-nav-center{display:flex;align-items:center;gap:.6rem;}
-.month-btn{width:30px;height:30px;border-radius:50%;border:1px solid var(--border);background:var(--bg2);color:var(--text);cursor:pointer;font-size:.9rem;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;}
+.month-btn{width:30px;height:30px;border-radius:50%;border:1px solid var(--border);background:var(--bg2);color:var(--text);cursor:pointer;font-size:.9rem;display:flex;align-items:center;justify-content:center;transition:all .15s;}
+.month-btn:hover{background:var(--border);}
 .month-title{font-size:1.15rem;font-weight:700;min-width:150px;text-align:center;}
 .month-stats{margin-left:auto;display:flex;gap:.6rem;flex-wrap:wrap;}
 .stat-chip{display:flex;flex-direction:column;align-items:center;padding:.25rem .6rem;border-radius:6px;background:var(--bg2);border:1px solid var(--border);}
@@ -44,14 +48,14 @@ body{background:var(--bg);color:var(--text);font-family:'Syne',sans-serif;min-he
 .main{max-width:960px;margin:0 auto;padding:1rem 1rem 4rem;}
 .employee-bar{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:.8rem 1rem;margin-bottom:1rem;display:flex;align-items:center;gap:.8rem;flex-wrap:wrap;}
 .employee-bar label{font-size:.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;white-space:nowrap;}
-.employee-bar input{font-family:'Syne',sans-serif;font-size:.9rem;font-weight:600;background:transparent;border:none;border-bottom:2px solid var(--border);color:var(--text);padding:.15rem .3rem;min-width:140px;transition:border-color .15s;}
+.employee-bar input{font-family:'Syne',sans-serif;font-size:.9rem;font-weight:600;background:transparent;border:none;border-bottom:2px solid var(--border);color:var(--text);padding:.15rem .3rem;min-width:120px;}
 .employee-bar input:focus{outline:none;border-color:var(--accent);}
 .legend{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:.8rem;}
 .legend-item{display:flex;align-items:center;gap:.3rem;font-size:.65rem;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.05em;}
 .legend-dot{width:9px;height:9px;border-radius:50%;}
 .table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;}
 table{width:100%;border-collapse:collapse;background:var(--surface);border:1px solid var(--border);border-radius:8px;overflow:hidden;font-size:.8rem;}
-thead th{background:var(--text);color:#9a9488;font-family:'IBM Plex Mono',monospace;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;padding:.6rem .7rem;text-align:left;font-weight:500;white-space:nowrap;}
+thead th{background:var(--text);color:#9a9488;font-family:'IBM Plex Mono',monospace;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;padding:.6rem .7rem;text-align:left;font-weight:500;}
 tbody tr{border-bottom:1px solid var(--border);}
 tbody tr:last-child{border-bottom:none;}
 tbody tr.weekend{background:var(--bg2);}
@@ -66,7 +70,7 @@ td{padding:.45rem .7rem;vertical-align:middle;white-space:nowrap;}
 .td-hours{min-width:60px;font-family:'IBM Plex Mono',monospace;}
 .td-note{min-width:180px;max-width:260px;}
 .td-actions{min-width:50px;text-align:right;}
-select.type-sel{font-family:'Syne',sans-serif;font-size:.72rem;font-weight:600;padding:.25rem .5rem;border-radius:20px;border:1.5px solid transparent;cursor:pointer;-webkit-appearance:none;appearance:none;text-align:center;width:100%;transition:all .15s;}
+select.type-sel{font-family:'Syne',sans-serif;font-size:.72rem;font-weight:600;padding:.25rem .5rem;border-radius:20px;border:1.5px solid transparent;cursor:pointer;-webkit-appearance:none;appearance:none;padding-right:1.5rem;background-position:right .5rem center;background-repeat:no-repeat;background-size:1rem;}
 select.type-sel:focus{outline:none;}
 select.type-sel.t-work    {background:var(--work-bg);    color:var(--work);    border-color:var(--work);}
 select.type-sel.t-vacation{background:var(--vacation-bg);color:var(--vacation);border-color:var(--vacation);}
@@ -89,10 +93,10 @@ input.note-in::placeholder{color:#ccc7bc;font-style:italic;}
 .modal h2{font-size:1.2rem;font-weight:800;margin-bottom:1rem;}
 .modal .field{margin-bottom:.9rem;}
 .modal label{display:block;font-size:.65rem;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-bottom:.3rem;font-weight:600;}
-.modal input[type=email],.modal textarea{width:100%;font-family:'Syne',sans-serif;font-size:.88rem;padding:.55rem .7rem;border:1.5px solid var(--border);border-radius:6px;background:var(--bg2);color:var(--text);resize:vertical;}
+.modal input[type=email],.modal textarea{width:100%;font-family:'Syne',sans-serif;font-size:.88rem;padding:.55rem .7rem;border:1.5px solid var(--border);border-radius:6px;background:var(--bg2);color:var(--text);}
 .modal input[type=email]:focus,.modal textarea:focus{outline:none;border-color:var(--accent);background:#fff;}
 .modal-actions{display:flex;gap:.5rem;justify-content:flex-end;margin-top:1.2rem;}
-.toast{position:fixed;bottom:1.5rem;right:1rem;left:1rem;background:var(--text);color:#f0ede8;font-family:'IBM Plex Mono',monospace;font-size:.75rem;padding:.65rem 1rem;border-radius:6px;box-shadow:0 8px 24px rgba(0,0,0,.25);transform:translateY(100px);opacity:0;transition:all .3s;z-index:200;pointer-events:none;text-align:center;}
+.toast{position:fixed;bottom:1.5rem;right:1rem;left:1rem;background:var(--text);color:#f0ede8;font-family:'IBM Plex Mono',monospace;font-size:.75rem;padding:.65rem 1rem;border-radius:6px;box-shadow:0 4px 12px rgba(0,0,0,.15);transform:translateY(120%);opacity:0;transition:all .3s;z-index:200;}
 .toast.show{transform:translateY(0);opacity:1;}
 .print-header{display:none;text-align:center;margin-bottom:1rem;font-size:.8rem;color:#666;}
 .save-indicator{font-family:'IBM Plex Mono',monospace;font-size:.6rem;color:var(--muted);padding:.2rem .5rem;}
@@ -121,7 +125,7 @@ input.note-in::placeholder{color:#ccc7bc;font-style:italic;}
   </div>
   <div class="header-right no-print">
     <button class="btn btn-ghost" onclick="openSendModal()">✉ E-mail</button>
-    <button class="btn btn-gold" onclick="window.print()">⎙ Tisk</button>
+    <button class="btn btn-gold" onclick="downloadPDF()">⎙ Tisk do PDF</button>
   </div>
 </div>
 
@@ -141,7 +145,7 @@ input.note-in::placeholder{color:#ccc7bc;font-style:italic;}
   </div>
 </div>
 
-<div class="main">
+<div class="main" id="pdfContent">
   <div class="print-header" id="printHeader"></div>
 
   <div class="employee-bar no-print">
@@ -394,6 +398,23 @@ function updatePrintHeader(){
 
 function openSendModal(){ document.getElementById('sendModal').classList.add('open'); }
 function closeSendModal(){ document.getElementById('sendModal').classList.remove('open'); }
+
+function downloadPDF(){
+  showToast('Generuji PDF…');
+  var element = document.getElementById('pdfContent');
+  var filename = 'Dochazka_'+(meta.name||'export')+'_'+MONTHS_CS[currentMonth]+'_'+currentYear+'.pdf';
+  
+  var opt = {
+    margin: [10, 10, 10, 10],
+    filename: filename,
+    image: { type: 'jpeg', quality: 0.98 },
+    html2canvas: { scale: 2, logging: false },
+    jsPDF: { orientation: 'portrait', unit: 'mm', format: 'a4' }
+  };
+  
+  html2pdf().set(opt).from(element).save();
+  setTimeout(function(){ showToast('✓ PDF bylo uloženo!'); }, 500);
+}
 
 function sendEmail(){
   var email=document.getElementById('sendEmail').value.trim();
